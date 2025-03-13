@@ -9,9 +9,13 @@ GROUP BY d.driver_id
 ORDER BY total_rides DESC;
 
 -- Weekly active drivers
+.headers on
+.mode csv
+.output weekly_active_drivers.csv
 SELECT date(t.timestamp, 'weekday 0', '-6 days') AS week_start, COUNT(DISTINCT r.driver_id) AS active_drivers
 FROM rides r
 JOIN timestamps t ON r.ride_id = t.ride_id
 WHERE t.event = 'picked_up_at'
 GROUP BY date(t.timestamp, 'weekday 0', '-6 days')
 ORDER BY week_start;
+.output stdout
